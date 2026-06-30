@@ -41,7 +41,7 @@
     
     .game-container {
       width: 100%;
-      max-width: 520px; /* ทรงแนวตั้งสไตล์ Arcade Mobile */
+      max-width: 520px;
       background: rgba(13, 20, 48, 0.6);
       border: 4px solid #1f3275;
       border-radius: 28px;
@@ -87,7 +87,6 @@
       box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
     }
 
-    /* โจทย์ข้อความคำถามขนาดใหญ่ด้านบน */
     .q-headline {
       position: absolute;
       top: 20px;
@@ -97,7 +96,7 @@
       border: 2px solid #00f2fe;
       border-radius: 16px;
       padding: 12px 24px;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
       color: #ffffff;
       text-align: center;
@@ -105,7 +104,7 @@
       box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
       white-space: nowrap;
     }
-    .q-headline span { color: #ecc94b; display: block; font-size: 26px; margin-top: 4px; }
+    .q-headline span { color: #ecc94b; display: block; font-size: 24px; margin-top: 4px; }
 
     /* ธงเป้าหมายทรงกลมลอยตัวเรืองแสง */
     .target-bubble {
@@ -118,8 +117,8 @@
       animation: space-float 4s ease-in-out infinite;
     }
     .target-bubble .flag-circle {
-      width: 70px;
-      height: 70px;
+      width: 75px;
+      height: 75px;
       font-size: 44px;
       background: #101636;
       border: 3px solid #4facfe;
@@ -134,13 +133,13 @@
     
     .target-bubble .label-text {
       margin-top: 6px;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       background: rgba(0,0,0,0.8);
       padding: 2px 8px;
       border-radius: 8px;
       border: 1px solid #1f3275;
-      color: #cbd5e0;
+      color: #fff;
     }
 
     /* จรวดผู้เล่นด้านล่าง */
@@ -154,7 +153,7 @@
       filter: drop-shadow(0 0 10px rgba(0,242,254,0.6));
     }
 
-    /* ลำแสงเลเซอร์นีออน ⚡ */
+    /* ลำแสงเลเซอร์นีออน */
     .laser-beam {
       position: absolute;
       width: 6px;
@@ -165,14 +164,12 @@
       animation: laser-glow 0.05s infinite;
     }
 
-    /* คะแนนลอยขึ้น */
     .score-pop {
       position: absolute;
       font-size: 20px;
       font-weight: 900;
       pointer-events: none;
       z-index: 12;
-      animation: space-float 0.6s ease-out forwards;
     }
 
     /* ---- OVERLAYS & RESULTS ---- */
@@ -189,7 +186,7 @@
       text-align: center;
       border-radius: 20px;
     }
-    .overlay h2 { font-size: 32px; color: #00f2fe; margin-bottom: 10px; text-shadow: 0 0 10px rgba(0,242,254,0.4); }
+    .overlay h2 { font-size: 32px; color: #00f2fe; margin-bottom: 10px; }
     .overlay p { color: #a0aec0; font-size: 16px; margin-bottom: 20px; }
 
     button.btn-action {
@@ -202,13 +199,10 @@
       border-radius: 12px;
       cursor: pointer;
       box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-      transition: all 0.1s;
     }
-    button.btn-action:active { transform: scale(0.95); }
 
-    /* หน้าสรุปผลลัพธ์ปรับดีไซน์อัศวินอวกาศสุดหรู */
     .result-title { font-size: 28px; color: #ecc94b; font-weight: 900; text-align: center; margin-bottom: 20px; }
-    .result-score-big { font-size: 64px; font-weight: 900; color: #00f2fe; text-align: center; line-height: 1; }
+    .result-score-big { font-size: 64px; font-weight: 900; color: #00f2fe; text-align: center; }
     
     .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
     .stat-card { background: rgba(0,0,0,0.3); border: 1px solid #1f3275; border-radius: 12px; padding: 12px; text-align: center; }
@@ -217,14 +211,13 @@
 
     .input-box-wrap { display: flex; gap: 8px; margin-bottom: 16px; }
     .input-box-wrap input { flex: 1; padding: 12px; background: rgba(0,0,0,0.4); border: 2px solid #1f3275; border-radius: 10px; color: #fff; font-size: 14px; }
-    .input-box-wrap input:focus { outline: none; border-color: #00f2fe; }
-
+    
     .menu-row { display: flex; gap: 10px; }
     .menu-row button { flex: 1; padding: 10px; font-size: 14px; background: rgba(255,255,255,0.05); border: 1px solid #1f3275; color: #fff; border-radius: 10px; cursor: pointer; }
-    .menu-row button:hover { background: rgba(255,255,255,0.1); }
 
     .screen { display: none; }
     .screen.active { display: block; }
+    .lb-table { width: 100%; border-collapse: collapse; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -232,16 +225,15 @@
 <div class="game-container">
   
   <div class="screen active" id="scHome">
-    <h1 style="font-size: 34px; font-weight: 900; text-align: center; color: #00f2fe; margin-bottom: 6px; letter-spacing: 1px;">🚀 SPACE SHOOTER</h1>
-    <p style="text-align: center; color: #a0aec0; font-size: 14px; margin-bottom: 25px;">ภารกิจยิงธงปกป้องพิกัดทวีปโลก</p>
+    <h1 style="font-size: 34px; font-weight: 900; text-align: center; color: #00f2fe; margin-bottom: 6px;">🚀 SPACE SHOOTER</h1>
+    <p style="text-align: center; color: #a0aec0; font-size: 14px; margin-bottom: 25px;">ภารกิจยิงธงปกป้องพิกัตทวีปโลก</p>
     
     <div style="background: rgba(0,0,0,0.2); border: 1px solid #1f3275; border-radius: 16px; padding: 16px; margin-bottom: 20px; text-align: center;">
-      <p style="font-size: 15px; color: #cbd5e0; margin-bottom: 12px;">เลือกโหมดท้าทายพิกัดดวงดาว</p>
-      <button class="btn-action" style="width: 100%; font-size: 16px;" onclick="startGame()">⚔️ เปิดระบบปล่อยยานรบ</button>
+      <button class="btn-action" style="width: 100%;" onclick="startGame()">⚔️ เปิดระบบปล่อยยานรบ</button>
     </div>
 
     <p style="font-size: 14px; font-weight: 700; color: #ecc94b; margin-bottom: 8px;">🏆 อันดับบันทึกการบินสูงสุด (Top 10)</p>
-    <table style="width:100%; border-collapse:collapse; font-size:14px;" id="lbTable"></table>
+    <table class="lb-table" id="lbTable"></table>
   </div>
 
   <div class="screen" id="scGame">
@@ -255,7 +247,6 @@
     
     <div class="arena" id="arena">
       <div class="q-headline">ในทวีปนี้มีประเทศอะไรบ้าง? <span id="targetContinent">...</span></div>
-      
       <div class="player-rocket" id="playerRocket">🚀</div>
       
       <div class="overlay" id="lvlOverlay">
@@ -269,7 +260,6 @@
   <div class="screen" id="scResult">
     <div class="result-title">🎯 สรุปผลภารกิจพิทักษ์ทวีป</div>
     <div class="result-score-big" id="resScore">0</div>
-    <p style="text-align:center; font-size:13px; color:#a0aec0; margin-top:4px;">พลังงานรวมดวงดาว</p>
     
     <div class="grid-stats">
       <div class="stat-card"><div class="val" id="resCorrect">0</div><div class="lbl">วิเคราะห์ถูกต้อง</div></div>
@@ -290,7 +280,6 @@
 </div>
 
 <script>
-// ข้อมูลกลุ่มประเทศแยกหมวดหมู่ทวีปชัดเจนเพื่อให้โจทย์สุ่มสนุก
 const DATA = [
   { name: 'Thailand', flag: '🇹🇭', continent: 'Asia' },
   { name: 'Japan', flag: '🇯🇵', continent: 'Asia' },
@@ -298,25 +287,20 @@ const DATA = [
   { name: 'China', flag: '🇨🇳', continent: 'Asia' },
   { name: 'South Korea', flag: '🇰🇷', continent: 'Asia' },
   { name: 'Vietnam', flag: '🇻🇳', continent: 'Asia' },
-  
   { name: 'France', flag: '🇫🇷', continent: 'Europe' },
   { name: 'Germany', flag: '🇩🇪', continent: 'Europe' },
   { name: 'Italy', flag: '🇮🇹', continent: 'Europe' },
   { name: 'Spain', flag: '🇪🇸', continent: 'Europe' },
   { name: 'UK', flag: '🇬🇧', continent: 'Europe' },
   { name: 'Russia', flag: '🇷🇺', continent: 'Europe' },
-  
   { name: 'USA', flag: '🇺🇸', continent: 'North America' },
   { name: 'Canada', flag: '🇨🇦', continent: 'North America' },
   { name: 'Mexico', flag: '🇲🇽', continent: 'North America' },
-  
   { name: 'Brazil', flag: '🇧🇷', continent: 'South America' },
   { name: 'Argentina', flag: '🇦🇷', continent: 'South America' },
-  
   { name: 'Egypt', flag: '🇪🇬', continent: 'Africa' },
   { name: 'Nigeria', flag: '🇳🇬', continent: 'Africa' },
   { name: 'Kenya', flag: '🇰🇪', continent: 'Africa' },
-  
   { name: 'Australia', flag: '🇦🇺', continent: 'Oceania' }
 ];
 
@@ -350,11 +334,9 @@ function hideOverlay() {
   spawnLevel();
 }
 
-// เสกกลุ่มเป้าหมายธงทรงกลมลอยแบบสุ่มตำแหน่งไม่ให้ซ้อนทับแข็งกระด้าง
 function spawnLevel() {
   clearEnemies();
   
-  // เลือกทวีปเป้าหมายประจำด่านนี้
   let pool = CONTINENTS.filter(c => !usedContinents.includes(c));
   if(pool.length === 0) pool = CONTINENTS;
   currentTargetContinent = rand(pool);
@@ -363,12 +345,11 @@ function spawnLevel() {
 
   const arena = document.getElementById('arena');
   
-  // คัดแยกประเทศคำตอบที่ถูก และสุ่มตัวหลอกคนละทวีปมารวมกัน
   let correctChoices = DATA.filter(c => c.continent === currentTargetContinent);
   let wrongChoices = DATA.filter(c => c.continent !== currentTargetContinent);
   
   let rightAns = rand(correctChoices);
-  let wrongs = shuffle(wrongChoices).slice(0, 2); // เอาตัวหลอก 2 ตัว
+  let wrongs = shuffle(wrongChoices).slice(0, 2);
   let finalChoices = shuffle([rightAns, ...wrongs]);
 
   finalChoices.forEach((choice, i) => {
@@ -376,13 +357,12 @@ function spawnLevel() {
     el.className = 'target-bubble';
     el.innerHTML = '<div class="flag-circle">' + choice.flag + '</div><div class="label-text">' + choice.name + '</div>';
     
-    // สุ่มพิกัดลอยตัว X และ Y กระจายตัวอิสระในกรุงอวกาศแนวตั้ง
     const xPos = 40 + (i * 150) + (Math.random() * 20);
     const yPos = 160 + (Math.random() * 100);
     
     el.style.left = Math.max(15, Math.min(xPos, arena.offsetWidth - 95)) + 'px';
     el.style.top = yPos + 'px';
-    el.style.animationDelay = (i * 0.4) + 's'; // เหลื่อมจังหวะลอยตัว
+    el.style.animationDelay = (i * 0.4) + 's';
     
     el.dataset.correct = (choice.continent === currentTargetContinent);
     el.onclick = () => fireLaser(el, choice.continent === currentTargetContinent);
@@ -394,17 +374,15 @@ function spawnLevel() {
 
 function clearEnemies() { enemies.forEach(e => e.remove()); enemies = []; }
 
-// ระบบยิงลำแสงเลเซอร์นีออนพุ่งทะยานแนวตั้งความเร็วสูง ⚡
 function fireLaser(target, isCorrect) {
   if (!gameActive) return;
-  gameActive = false; // บล็อกคลิกซ้ำซ้อนชั่วคราว
+  gameActive = false;
   
   const arena = document.getElementById('arena');
   const tRect = target.getBoundingClientRect();
   const aRect = arena.getBoundingClientRect();
   const pRect = document.getElementById('playerRocket').getBoundingClientRect();
   
-  // คำนวณจุดปล่อยแสงตรงหน้าจรวดพุ่งไปถึงกึ่งกลางเป้าหมายธงกลม
   const startX = pRect.left - aRect.left + (pRect.width / 2);
   const startY = pRect.top - aRect.top;
   const endX = tRect.left - aRect.left + (tRect.width / 2);
@@ -416,14 +394,12 @@ function fireLaser(target, isCorrect) {
   beam.style.top = endY + 'px';
   beam.style.height = (startY - endY) + 'px';
   
-  // เอฟเฟกต์เบี่ยงเบนแนวลำแสงขยับตามทิศทางเป้าหมาย
   const angle = Math.atan2(endX - startX, endY - startY);
   beam.style.transform = `rotate(${-angle}rad)`;
   beam.style.transformOrigin = 'bottom center';
   
   arena.appendChild(beam);
 
-  // เลเซอร์พุ่งไวมาก (100ms) แล้วเกิดระเบิดประมวลผลคำตอบทันที
   setTimeout(() => {
     beam.remove();
     processHit(target, isCorrect, endX, endY);
@@ -442,9 +418,8 @@ function processHit(target, isCorrect, ex, ey) {
     pop.textContent = '+20 EXP';
     arena.appendChild(pop);
     
-    // เอฟเฟกต์ธงยุบตัวระเบิดหายไป
     target.style.transform = 'scale(0)';
-    target.style.transition = 'transform 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045)';
+    target.style.transition = 'transform 0.2s';
     
     setTimeout(() => {
       pop.remove();
@@ -455,7 +430,6 @@ function processHit(target, isCorrect, ex, ey) {
       if (currentLevel > 10) {
         endGameSession();
       } else {
-        // [ระบบไร้รอยต่อตามต้องการ] สุ่มด่านเปลี่ยนทวีปใหม่ทันทีโดยอัตโนมัติ ไม่ตัดหน้าต่างแจ้งเตือน
         document.getElementById('lvlDisp').textContent = currentLevel;
         updateProgress();
         gameActive = true;
@@ -475,7 +449,7 @@ function processHit(target, isCorrect, ex, ey) {
     if (hp <= 0) {
       setTimeout(() => endGameSession(true), 400);
     } else {
-      gameActive = true; // ให้โอกาสแก้ตัวยิงใหม่ในข้อเดิม
+      gameActive = true;
     }
   }
 }
@@ -504,7 +478,7 @@ function saveScore() {
 
 function renderLB() {
   const rows = leaderboard.map((e, i) => `<tr><td style="padding:8px; color:#ecc94b;">#${i+1}</td><td style="padding:8px;">${e.name}</td><td style="padding:8px; color:#00f2fe; font-weight:700;">${e.score}</td><td style="padding:8px;">${e.stars}</td></tr>`).join('');
-  document.getElementById('lbTable').innerHTML = rows || '<tr><td colspan="4" style="text-align:center; color:#a0aec0; padding:12px;">ยังไม่มีบันทึกรหัสนักบินอวกาศ</td></tr>';
+  document.getElementById('lbTable').innerHTML = rows || '<tr><td colspan="4" style="text-align:center; color:#a0aec0; padding:12px;">ยังไม่มีบันทึกข้อมูล</td></tr>';
 }
 
 renderLB();
