@@ -3,33 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Space Hunting — พิทักษ์ทวีปโลก</title>
+  <title>Space Quiz Shooter — ภารกิจพิทักษ์ทวีป</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700;900&display=swap" rel="stylesheet">
   
   <style>
-    /* ---- ANIMATIONS & GLOWS ---- */
-    @keyframes laser-pulse {
-      0%, 100% { box-shadow: 0 0 8px #ff3b3b; }
-      50% { box-shadow: 0 0 16px #ff3b3b; }
+    /* ---- 1. SPACE CORE EFFECTS ---- */
+    @keyframes bubble-float {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(-12px) translateX(6px); }
     }
-    @keyframes bubble-glow {
-      0%, 100% { border-color: #38a169; box-shadow: 0 0 12px rgba(56, 161, 105, 0.6); }
-      50% { border-color: #48bb78; box-shadow: 0 0 20px rgba(72, 187, 120, 0.9); }
+    @keyframes laser-flash {
+      0%, 100% { box-shadow: 0 0 8px #00f2fe, 0 0 15px #00f2fe; }
+      50% { box-shadow: 0 0 18px #00f2fe, 0 0 30px #00f2fe; }
     }
-    @keyframes shake {
+    @keyframes arena-shake {
       0%, 100% { transform: translate(0, 0); }
-      20%, 60% { transform: translate(-5px, 5px); }
-      40%, 80% { transform: translate(5px, -5px); }
+      20%, 60% { transform: translate(-4px, 4px); }
+      40%, 80% { transform: translate(4px, -4px); }
     }
-    .shake-active { animation: shake 0.2s ease-in-out; }
+    .shake-active { animation: arena-shake 0.2s ease-in-out; }
 
-    /* ---- BASE ARCHITECTURE ---- */
+    /* ---- 2. ARCADE CABINET LAYOUT ---- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
       font-family: 'Prompt', sans-serif;
-      background: #04050f;
-      background-image: radial-gradient(circle at 50% 50%, #0a0d24 0%, #04050f 100%);
+      background: #030511;
+      background-image: radial-gradient(circle at 50% 50%, #090e29 0%, #030511 100%);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -39,135 +39,129 @@
       overflow: hidden;
     }
     
-    .game-box {
+    .cabinet-frame {
       width: 100%;
-      max-width: 480px; /* สัดส่วนทรงยาวแนวตั้งสไตล์เกมอาเขต */
-      background: rgba(10, 14, 38, 0.85);
-      border: 4px solid #1a2456;
+      max-width: 480px; /* บังคับทรงแนวตั้งยาวตาม Ref เกมตู้จรวด */
+      background: rgba(11, 16, 43, 0.9);
+      border: 4px solid #1a265c;
       border-radius: 24px;
       padding: 16px;
-      box-shadow: 0 0 35px rgba(0, 242, 254, 0.1);
+      box-shadow: 0 0 35px rgba(0, 242, 254, 0.15);
     }
 
-    /* ---- HUD PANELS ---- */
-    .hud {
+    /* แผงควบคุม HUD */
+    .hud-display {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.4);
       padding: 10px 16px;
       border-radius: 12px;
-      border: 1px solid #1a2456;
+      border: 1px solid #1a265c;
       font-size: 13px;
       margin-bottom: 10px;
     }
-    .hud strong { color: #00f2fe; font-size: 16px; }
-    .hearts { display: flex; gap: 3px; font-size: 16px; }
+    .hud-display strong { color: #00f2fe; font-size: 16px; }
+    .hearts-pack { display: flex; gap: 3px; font-size: 16px; }
     
-    .progress-bar-wrap {
+    .prog-track {
       height: 6px;
       background: rgba(0,0,0,0.6);
       border-radius: 3px;
       margin-bottom: 12px;
       overflow: hidden;
-      border: 1px solid #1a2456;
+      border: 1px solid #1a265c;
     }
-    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #00f2fe, #4facfe); width: 0%; transition: width 0.3s; }
+    .prog-prime { height: 100%; background: linear-gradient(90deg, #00f2fe, #4facfe); width: 0%; transition: width 0.3s; }
 
-    /* ---- STRICT VERTICAL ARENA ---- */
-    .arena {
+    /* Space Arena แนวตั้งดิ่ง */
+    .space-arena {
       position: relative;
       width: 100%;
       height: 560px;
       background: #020308;
-      background-image: radial-gradient(circle at 50% 90%, #080c25 0%, #020308 85%);
-      border: 2px solid #1a2456;
+      background-image: radial-gradient(circle at 50% 90%, #070a24 0%, #020308 85%);
+      border: 2px solid #1a265c;
       border-radius: 16px;
       overflow: hidden;
-      cursor: none; /* ซ่อนพอยเตอร์เมาส์ธรรมดาเพื่อให้คุมยานรบแทน */
+      cursor: none; /* คุมด้วยเมาส์เลื่อนยาน */
     }
 
-    /* แผงโจทย์ข้อความใหญ่แบบบอสสเตจด้านบน */
-    .question-banner {
+    /* กล่องโจทย์ทวีปด้านบน */
+    .quiz-header {
       position: absolute;
       top: 15px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(2, 3, 8, 0.9);
+      background: rgba(2, 3, 8, 0.95);
       border: 2px solid #00f2fe;
       border-radius: 12px;
       padding: 10px 20px;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 800;
       color: #ffffff;
       text-align: center;
       z-index: 10;
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+      white-space: nowrap;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
     }
-    .question-banner span { color: #ecc94b; display: block; font-size: 22px; margin-top: 2px; }
+    .quiz-header span { color: #ecc94b; display: block; font-size: 24px; margin-top: 2px; }
 
-    /* เป้าหมายธงวงกลมลอยตัวเรืองแสงออร่าเขียว/นีออน */
+    /* ธงเป้าหมายทรงกลมลอยตัวสุ่ม */
     .target-orb {
       position: absolute;
       display: flex;
       flex-direction: column;
       align-items: center;
       z-index: 5;
+      animation: bubble-float 3.5s ease-in-out infinite;
     }
-    .target-orb .orb-body {
-      width: 65px;
-      height: 65px;
-      font-size: 38px;
-      background: rgba(16, 22, 54, 0.9);
-      border: 3px solid #38a169;
+    .target-orb .flag-sphere {
+      width: 68px;
+      height: 68px;
+      font-size: 40px;
+      background: #0c112d;
+      border: 3px solid #4facfe;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      animation: bubble-glow 2s infinite;
+      box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
     }
     
-    .target-orb .orb-label {
+    .target-orb .flag-title {
       margin-top: 4px;
       font-size: 11px;
       font-weight: 700;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.8);
       padding: 1px 6px;
       border-radius: 6px;
-      border: 1px solid #1a2456;
+      border: 1px solid #1a265c;
       color: #e2e8f0;
     }
 
-    /* จรวดผู้เล่นเคลื่อนที่ตามเมาส์แกน X ด้านล่าง */
-    .ship-hero {
+    /* จรวดผู้เล่นแกน X แนวดิ่งด้านล่าง */
+    .fighter-ship {
       position: absolute;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 48px;
+      font-size: 46px;
       z-index: 9;
       filter: drop-shadow(0 0 8px rgba(0,242,254,0.6));
       pointer-events: none;
-      transition: left 0.05s linear; /* ขยับตามติดมือเรียบเนียน */
-    }
-    .ship-hero::after {
-      content: '';
-      position: absolute;
-      bottom: -8px; left: 50%; transform: translateX(-50%);
-      width: 8px; height: 8px; background: #00f2fe; border-radius: 50%;
-      box-shadow: 0 0 8px #00f2fe;
     }
 
-    /* ลำแสงเลเซอร์แนวดิ่งตรงสไตล์ตู้เกม ⚡ */
-    .vertical-laser {
+    /* กระสุนเลเซอร์แนวตั้งตรงดิ่ง ⚡ */
+    .vertical-beam {
       position: absolute;
       width: 4px;
-      height: 24px;
-      background: #ff3b3b; /* ลำแสงสีแดงเลเซอร์แนวตั้ง */
+      height: 22px;
+      background: #ff3333;
       border-radius: 2px;
       pointer-events: none;
       z-index: 8;
-      animation: laser-pulse 0.1s infinite;
+      animation: laser-flash 0.08s infinite;
     }
 
     .score-pop {
@@ -176,14 +170,13 @@
       font-weight: 900;
       pointer-events: none;
       z-index: 12;
-      animation: shake 0.5s ease-out forwards;
     }
 
-    /* ---- SCREENS & OVERLAYS ---- */
-    .overlay {
+    /* SYSTEM OVERLAYS */
+    .curtain {
       position: absolute;
       inset: 0;
-      background: rgba(2, 3, 8, 0.96);
+      background: rgba(2, 3, 8, 0.97);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -191,35 +184,34 @@
       z-index: 20;
       padding: 24px;
       text-align: center;
-      border-radius: 16px;
+      border-radius: 14px;
     }
-    .overlay h2 { font-size: 26px; color: #00f2fe; margin-bottom: 8px; }
-    .overlay p { color: #a0aec0; font-size: 14px; margin-bottom: 20px; }
+    .curtain h2 { font-size: 26px; color: #00f2fe; margin-bottom: 8px; }
+    .curtain p { color: #a0aec0; font-size: 14px; margin-bottom: 20px; }
 
-    button.btn-core {
+    button.action-btn {
       padding: 10px 24px;
       font-size: 15px;
       font-weight: 700;
       background: linear-gradient(180deg, #00f2fe 0%, #4facfe 100%);
       border: none;
-      color: #04050f;
+      color: #030511;
       border-radius: 10px;
       cursor: pointer;
       box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
     }
 
-    .result-score-big { font-size: 56px; font-weight: 900; color: #00f2fe; text-align: center; }
-    .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-    .stat-card { background: rgba(0,0,0,0.4); border: 1px solid #1a2456; border-radius: 10px; padding: 10px; text-align: center; }
-    .stat-card .val { font-size: 20px; font-weight: 700; color: #fff; }
-    .stat-card .lbl { font-size: 12px; color: #a0aec0; }
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+    .stat-tile { background: rgba(0,0,0,0.4); border: 1px solid #1a265c; border-radius: 10px; padding: 10px; text-align: center; }
+    .stat-tile .v { font-size: 20px; font-weight: 700; color: #fff; }
+    .stat-tile .l { font-size: 12px; color: #a0aec0; }
 
-    .input-wrap { display: flex; gap: 6px; margin-bottom: 14px; }
-    .input-wrap input { flex: 1; padding: 10px; background: rgba(0,0,0,0.5); border: 2px solid #1a2456; border-radius: 8px; color: #fff; font-size: 14px; }
-    .input-wrap input:focus { outline: none; border-color: #00f2fe; }
+    .input-chamber { display: flex; gap: 6px; margin-bottom: 14px; }
+    .input-chamber input { flex: 1; padding: 10px; background: rgba(0,0,0,0.5); border: 2px solid #1a265c; border-radius: 8px; color: #fff; font-size: 14px; }
+    .input-chamber input:focus { outline: none; border-color: #00f2fe; }
 
-    .menu-row { display: flex; gap: 8px; }
-    .menu-row button { flex: 1; padding: 10px; font-size: 13px; background: rgba(255,255,255,0.05); border: 1px solid #1a2456; color: #fff; border-radius: 8px; cursor: pointer; }
+    .btn-grid { display: flex; gap: 8px; }
+    .btn-grid button { flex: 1; padding: 10px; font-size: 13px; background: rgba(255,255,255,0.05); border: 1px solid #1a265c; color: #fff; border-radius: 8px; cursor: pointer; }
 
     .screen { display: none; }
     .screen.active { display: block; }
@@ -227,58 +219,57 @@
 </head>
 <body>
 
-<div class="game-box">
+<div class="cabinet-frame">
   
   <div class="screen active" id="scHome">
     <h1 style="font-size: 32px; font-weight: 900; text-align: center; color: #00f2fe; margin-bottom: 4px;">🚀 SPACE HUNTING</h1>
-    <p style="text-align: center; color: #a0aec0; font-size: 13px; margin-bottom: 20px;">ภารกิจคุมยานยิงธงทวีปในแนวดิ่ง</p>
+    <p style="text-align: center; color: #a0aec0; font-size: 13px; margin-bottom: 25px;">เลื่อนเมาส์คุมจรวดยิงเลเซอร์แนวดิ่งตรง</p>
     
-    <div style="background: rgba(0,0,0,0.25); border: 1px solid #1a2456; border-radius: 14px; padding: 14px; margin-bottom: 16px; text-align: center;">
-      <button class="btn-core" style="width: 100%;" onclick="startGame()">⚔️ เริ่มต้นระบบควบคุมการรบ</button>
+    <div style="background: rgba(0,0,0,0.25); border: 1px solid #1a265c; border-radius: 14px; padding: 14px; margin-bottom: 16px; text-align: center;">
+      <button class="action-btn" style="width: 100%;" onclick="startGame()">⚔️ เริ่มต้นปล่อยยานรบ</button>
     </div>
 
-    <p style="font-size: 13px; font-weight: 700; color: #ecc94b; margin-bottom: 6px;">🏆 บันทึกอันดับนักล่าอวกาศ (Top 10)</p>
-    <table style="width:100%; border-collapse:collapse; font-size:13px;" id="lbTable"></table>
+    <p style="font-size: 13px; font-weight: 700; color: #ecc94b; margin-bottom: 6px;">🏆 บันทึกอันดับนักบินอวกาศสูงสุด (Top 10)</p>
+    <table style="width:100%; border-collapse:collapse; font-size:13px; color:#fff;" id="lbTable"></table>
   </div>
 
   <div class="screen" id="scGame">
-    <div class="hud">
-      <div>เวฟเป้าหมาย <strong id="lvlDisp">1</strong>/10</div>
-      <div id="heartsDisp" class="hearts"></div>
-      <div>EXP พลังงาน <strong id="scoreDisp">0</strong></div>
+    <div class="hud-display">
+      <div>เวฟภารกิจ <strong id="lvlDisp">1</strong>/10</div>
+      <div id="heartsDisp" class="hearts-pack"></div>
+      <div>พลังงาน EXP <strong id="scoreDisp">0</strong></div>
     </div>
     
-    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progFill"></div></div>
+    <div class="prog-track"><div class="prog-prime" id="progFill"></div></div>
     
-    <div class="arena" id="arena" id="playArena">
-      <div class="question-banner">ในทวีปนี้มีประเทศอะไรบ้าง? <span id="targetContinent">...</span></div>
+    <div class="space-arena" id="arena">
+      <div class="quiz-header">ในทวีปนี้มีประเทศอะไรบ้าง? <span id="targetContinent">...</span></div>
+      <div class="fighter-ship" id="shipHero">🚀</div>
       
-      <div class="ship-hero" id="shipHero">🛸</div>
-      
-      <div class="overlay" id="lvlOverlay">
-        <h2>ระบบล็อกปืนแสงแนวดิ่ง</h2>
-        <p>เลื่อนเมาส์คุมยานซ้าย-ขวา ดักยิงเลเซอร์แนวตรงใส่ธงทรงกลมให้ตรงหมวดทวีป!</p>
-        <button class="btn-core" onclick="hideOverlay()">ปลดล็อกปืนแสง ⚔️</button>
+      <div class="curtain" id="lvlOverlay">
+        <h2>ระบบล็อกปืนเลเซอร์ดิ่ง</h2>
+        <p>เลื่อนเมาส์ไปซ้าย-ขวาเพื่อขยับจรวด แล้วคลิกยิงเลเซอร์แนวตรง 90 องศาขึ้นด้านบน!</p>
+        <button class="action-btn" onclick="hideOverlay()">เปิดระบบอาวุธ ⚔️</button>
       </div>
     </div>
   </div>
 
   <div class="screen" id="scResult">
-    <h3 style="text-align:center; font-size:24px; color:#ecc94b; font-weight:900; margin-bottom:15px;">🎯 สรุปภารกิจล่าดวงดาว</h3>
-    <div class="result-score-big" id="resScore">0</div>
+    <h3 style="text-align:center; font-size:24px; color:#ecc94b; font-weight:900; margin-bottom:15px;">🎯 สรุปผลภารกิจบิน</h3>
+    <div style="font-size: 56px; font-weight: 900; color: #00f2fe; text-align: center;" id="resScore">0</div>
     
-    <div class="grid-stats">
-      <div class="stat-card"><div class="val" id="resCorrect">0</div><div class="lbl">โจมตีถูกต้อง</div></div>
-      <div class="stat-card"><div class="val" id="resStars">⭐</div><div class="lbl">เหรียญเกียรติยศ</div></div>
+    <div class="stat-row">
+      <div class="stat-tile"><div class="v" id="resCorrect">0</div><div class="l">วิเคราะห์ถูกต้อง</div></div>
+      <div class="stat-tile"><div class="v" id="resStars">⭐</div><div class="l">เหรียญเกียรติยศ</div></div>
     </div>
     
-    <div class="input-wrap">
+    <div class="input-chamber">
       <input type="text" id="nameInput" placeholder="ระบุรหัสชื่อนักบินเพื่อบันทึกสถิติ" maxlength="14">
-      <button class="btn-core" style="padding:8px 14px; font-size:13px;" onclick="saveScore()">บันทึกข้อมูล</button>
+      <button class="action-btn" style="padding:8px 14px; font-size:13px;" onclick="saveScore()">จารึกข้อมูล</button>
     </div>
     
-    <div class="menu-row">
-      <button onclick="startGame()">ลุยเวฟใหม่</button>
+    <div class="btn-grid">
+      <button onclick="startGame()">เริ่มเวฟใหม่</button>
       <button onclick="goHome()">🏠 หน้าหลัก</button>
     </div>
   </div>
@@ -314,7 +305,7 @@ const CONTINENTS = ['Asia', 'Europe', 'North America', 'South America', 'Africa'
 
 let currentLevel = 1, hp = 3, score = 0, correctCount = 0, gameActive = false;
 let currentTargetContinent = '', usedContinents = [], enemies = [], leaderboard = [];
-let shipX = 240; // ตำแหน่ง X ของยานรบหลัก
+let shipX = 240; 
 
 function shuffle(a) { return [...a].sort(() => Math.random() - .5); }
 function rand(a) { return a[Math.floor(Math.random() * a.length)]; }
@@ -342,23 +333,19 @@ function hideOverlay() {
   spawnLevel();
 }
 
-// ระบบคุมยานและคลิกยิงเลเซอร์ตามแนวตั้งตรงแนวดิ่ง 100%
 function initControls() {
   const arena = document.getElementById('arena');
   const ship = document.getElementById('shipHero');
   
-  // ควบคุมเมาส์เลื่อนขยับแกน X ซ้ายขวา
   arena.onmousemove = (e) => {
     if (!gameActive) return;
     const rect = arena.getBoundingClientRect();
     let x = e.clientX - rect.left;
-    // คุมขอบเขตปีกยานไม่ให้หลุดออกนอกกรอบอารีน่า
-    x = Math.max(25, Math.min(x, arena.offsetWidth - 25));
+    x = Math.max(30, Math.min(x, arena.offsetWidth - 30));
     shipX = x;
     ship.style.left = shipX + 'px';
   };
   
-  // คลิกเมาส์เพื่อปล่อยกระสุนเลเซอร์แนวดิ่งตรงแนวดิ่งขึ้นไปด้านบน
   arena.onclick = () => {
     if (!gameActive) return;
     fireVerticalLaser();
@@ -386,12 +373,11 @@ function spawnLevel() {
   finalChoices.forEach((choice, i) => {
     const el = document.createElement('div');
     el.className = 'target-orb';
-    el.innerHTML = '<div class="orb-body">' + choice.flag + '</div><div class="orb-label">' + choice.name + '</div>';
+    el.innerHTML = '<div class="flag-sphere">' + choice.flag + '</div><div class="flag-title">' + choice.name + '</div>';
     
-    // ตั้งพิกัดจัดวางให้เรียงแถวแนวตั้งด้านบนเพื่อให้เลื่อนยานไปส่องยิงได้สนุก
     const slotWidth = arena.offsetWidth / 3;
-    const xPos = (slotWidth * i) + (slotWidth / 2) - 32;
-    const yPos = 140 + (Math.random() * 80); // ระดับความสูงช่วงบน
+    const xPos = (slotWidth * i) + (slotWidth / 2) - 34;
+    const yPos = 130 + (Math.random() * 80); 
     
     el.style.left = xPos + 'px';
     el.style.top = yPos + 'px';
@@ -404,33 +390,29 @@ function spawnLevel() {
 
 function clearEnemies() { enemies.forEach(e => e.remove()); enemies = []; }
 
-// ระบบเสกเลเซอร์แนวดิ่งวิ่งพุ่งตรงขึ้นไปด้านบน ⚡
 function fireVerticalLaser() {
   const arena = document.getElementById('arena');
   const ship = document.getElementById('shipHero');
-  const shipRect = ship.getBoundingClientRect();
-  const arenaRect = arena.getBoundingClientRect();
   
-  const laserX = shipX; // ปล่อยจากกึ่งกลางลำตัวยานหลัก
-  let laserY = ship.offsetTop - 15;
+  const laserX = shipX; 
+  let laserY = ship.offsetTop - 12;
   
   const laser = document.createElement('div');
-  laser.className = 'vertical-laser';
+  laser.className = 'vertical-beam';
   laser.style.left = (laserX - 2) + 'px';
   laser.style.top = laserY + 'px';
-  arena.appendChild(boardLaserHitCheck(laser, laserX));
+  arena.appendChild(laser);
+  
+  runLaserEngine(laser, laserX);
 }
 
-// ลำแสงขยับเคลื่อนที่แกน Y ขึ้นด้านบนตรงๆ และเช็กคอลลิชั่นชนวัตถุทรงกลม
-function boardLaserHitCheck(laser, lx) {
-  const arena = document.getElementById('arena');
+function runLaserEngine(laser, lx) {
   let currentY = laser.offsetTop;
   
-  const moveTimer = setInterval(() => {
-    currentY -= 16; // เร่งความเร็วกระสุนวิ่งขึ้นบน
+  const engine = setInterval(() => {
+    currentY -= 15;
     laser.style.top = currentY + 'px';
     
-    // ตรวจสอบเช็กกระทบชนกับกลุ่มธงเป้าหมายด้านบน
     for (let i = 0; i < enemies.length; i++) {
       const target = enemies[i];
       const tx = target.offsetLeft;
@@ -438,33 +420,29 @@ function boardLaserHitCheck(laser, lx) {
       const tw = target.offsetWidth;
       const th = target.offsetHeight;
       
-      // คำนวณขอบเขตรัศมีทรงกลมชน
       if (lx >= tx && lx <= (tx + tw) && currentY >= ty && currentY <= (ty + th)) {
-        clearInterval(moveTimer);
+        clearInterval(engine);
         laser.remove();
-        checkTargetDestruction(target);
+        processDestruction(target);
         return;
       }
     }
     
-    // หากกระสุนหลุดขอบบนสุดอารีน่าให้สลายทำลายตัวเอง
     if (currentY <= 0) {
-      clearInterval(moveTimer);
+      clearInterval(engine);
       laser.remove();
     }
   }, 16);
-  
-  return laser;
 }
 
-function checkTargetDestruction(target) {
+function processDestruction(target) {
   if (!gameActive) return;
-  gameActive = false; // บล็อกระบบด่านชั่วคราวรอสลับ
+  gameActive = false; 
   
   const arena = document.getElementById('arena');
   const isCorrect = target.dataset.correct === 'true';
-  const ex = target.offsetLeft + 32;
-  const ey = target.offsetTop + 32;
+  const ex = target.offsetLeft + 34;
+  const ey = target.offsetTop + 34;
   
   const pop = document.createElement('div');
   pop.className = 'score-pop';
@@ -472,7 +450,7 @@ function checkTargetDestruction(target) {
   if (isCorrect) {
     score += 20; correctCount++;
     document.getElementById('scoreDisp').textContent = score;
-    pop.style.cssText = `left: ${ex}px; top: ${ey}px; color: #00f2fe; text-shadow: 0 0 10px #00f2fe;`;
+    pop.style.cssText = `left: ${ex}px; top: ${ey}px; color: #00f2fe; text-shadow: 0 0 8px #00f2fe;`;
     pop.textContent = '+20 EXP';
     arena.appendChild(pop);
     
@@ -499,13 +477,13 @@ function checkTargetDestruction(target) {
     arena.classList.add('shake-active');
     setTimeout(() => arena.classList.remove('shake-active'), 200);
     
-    pop.style.cssText = `left: ${ex}px; top: ${ey}px; color: #ff4d4d; text-shadow: 0 0 10px #ff4d4d;`;
+    pop.style.cssText = `left: ${ex}px; top: ${ey}px; color: #ff4d4d; text-shadow: 0 0 8px #ff4d4d;`;
     pop.textContent = '❌ ผิด! (-1 HP)';
     arena.appendChild(pop);
     
     setTimeout(() => {
       pop.remove();
-      gameActive = true; // เปิดสิทธิ์ให้เลื่อนยานส่องยิงใหม่ในข้อนี้
+      gameActive = true; 
     }, 600);
     
     if (hp <= 0) {
@@ -538,7 +516,7 @@ function saveScore() {
 
 function renderLB() {
   const rows = leaderboard.map((e, i) => `<tr><td style="padding:8px; color:#ecc94b;">#${i+1}</td><td style="padding:8px;">${e.name}</td><td style="padding:8px; color:#00f2fe; font-weight:700;">${e.score}</td><td style="padding:8px;">${e.stars}</td></tr>`).join('');
-  document.getElementById('lbTable').innerHTML = rows || '<tr><td colspan="4" style="text-align:center; color:#a0aec0; padding:12px;">ยังไม่มีบันทึกข้อมูล</td></tr>';
+  document.getElementById('lbTable').innerHTML = rows || '<tr><td colspan="4" style="text-align:center; color:#a0aec0; padding:12px;">ยังไม่มีบันทึกสถิติ</td></tr>';
 }
 
 renderLB();
